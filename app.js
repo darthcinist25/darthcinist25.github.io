@@ -12,7 +12,7 @@ const seed={demoVersion:9,settings:{rate:105,cost:'',markup:50,markupPolicyVersi
 {id:'DEMO-108',property:'Villa Palazzo',zone:'North Fresno',title:'Replace damaged fixture',priority:'High',hours:1.5,tech:'Unassigned',status:'On hold',desc:'Illustrative blocked job: waiting for replacement fixture.',recurring:'',date:today}
 ]};
 let state;try{state=JSON.parse(localStorage.getItem(DEMO_STORAGE_KEY))}catch{state=null}
-if(!state||state.demoVersion!==9||!Array.isArray(state.jobs)||state.jobs.length<8||!state.settings){state=structuredClone(seed);try{localStorage.setItem(DEMO_STORAGE_KEY,JSON.stringify(state))}catch{}}
+if(!state||state.demoVersion!==9||!Array.isArray(state.jobs)||state.jobs.length<8||!state.settings){state=JSON.parse(JSON.stringify(seed));try{localStorage.setItem(DEMO_STORAGE_KEY,JSON.stringify(state))}catch{}}
 let page='dispatch',tech='Tech 1',search='',filter='All',selectedDate=today;
 function save(){try{localStorage.setItem(DEMO_STORAGE_KEY,JSON.stringify(state))}catch{toast('Browser storage is full. Export your data before continuing.');throw Error('Storage unavailable')}}
 function log(msg){state.activity.unshift({text:msg,at:new Date().toISOString()});state.activity=state.activity.slice(0,100);save()}
