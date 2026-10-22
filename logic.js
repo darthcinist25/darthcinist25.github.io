@@ -1,0 +1,6 @@
+(function(root){
+function estimate(v){const hours=Number(v.hours),rate=Number(v.rate),materials=Number(v.materials),markup=Number(v.markup);if([hours,rate,materials,markup].some(x=>!Number.isFinite(x)||x<0))throw Error('Use valid, non-negative amounts.');const labor=hours*rate,materialPrice=materials*(1+markup/100),total= Math.round((labor+materialPrice)*100)/100;const cost=v.cost===''||v.cost==null?null:Number(v.cost);if(cost!==null&&(!Number.isFinite(cost)||cost<0))throw Error('Enter a valid labor cost.');const directCost=cost===null?null:hours*cost+materials;return {labor,materialPrice,total,directCost,contribution:directCost===null?null:total-directCost};}
+function capacity(jobs,tech,travel,other){const assigned=jobs.filter(j=>j.tech===tech);const work=assigned.reduce((a,j)=>{const actual=Number(j.actual||0)+(j.timer?Math.max(0,(Date.now()-j.timer)/3600000):0);return a+(j.status==='Complete'&&actual>0?actual:Math.max(Number(j.hours),actual));},0);const stops=new Set(assigned.map(j=>j.property)).size;return {work,travel:stops*travel/60,total:work+stops*travel/60+other/60,stops};}
+root.FW={estimate,capacity};if(typeof module!=='undefined')module.exports=root.FW;
+})(typeof window==='undefined'?globalThis:window);
+
