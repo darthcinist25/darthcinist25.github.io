@@ -1,7 +1,7 @@
 const fieldMode=matchMedia('(max-width:760px)').matches||new URLSearchParams(location.search).has('mobile');
 if(fieldMode){
  document.body.classList.add('field-mode');
- tech=localStorage.getItem('unity-technician')||'Tech 1';page='today';
+ try{tech=localStorage.getItem('unity-technician')||'Tech 1'}catch{tech='Tech 1'}page='today';
  const baseRender=render;
  render=function(){baseRender();
   const labels={today:'My day',orders:'Jobs',estimates:'Estimate',settings:'More'};
