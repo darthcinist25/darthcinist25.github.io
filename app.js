@@ -1,17 +1,20 @@
 const $=s=>document.querySelector(s), esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])), money=n=>new Intl.NumberFormat('en-US',{style:'currency',currency:'USD'}).format(n);
 const today=new Date().toLocaleDateString('en-CA');
-const seed={settings:{rate:105,cost:'',markup:50,travel:20,other:60},estimates:[],activity:[],jobs:[
-{id:'00012197',property:'St Michel',zone:'North Fresno',title:'Lights',priority:'High',hours:2,tech:'Tech 1',status:'Scheduled',desc:'Inspect reported lighting issue. Confirm exact scope and materials on arrival.',recurring:'',date:today},
+const DEMO_STORAGE_KEY='unity-fieldwork-complete-demo-v9';
+const seed={demoVersion:9,settings:{rate:105,cost:'',markup:50,markupPolicyVersion:2,travel:20,other:60},estimates:[],activity:[{text:'Complete field demo loaded',at:new Date().toISOString()}],jobs:[
+{id:'00012197',property:'St Michel',zone:'North Fresno',title:'Lights',priority:'High',hours:2,tech:'Tech 1',status:'Scheduled',desc:'Inspect reported lighting issue. Confirm exact scope and materials on arrival.',address:'St Michel, Fresno, CA',addressVerified:false,manager:'Community Manager',managerEmail:'',recurring:'',date:today},
 {id:'DEMO-102',property:'Arboleda',zone:'NW Fresno',title:'Common-area maintenance',priority:'Normal',hours:2.5,tech:'Tech 1',status:'Scheduled',desc:'Illustrative job. Inspect common areas and document completed tasks.',recurring:'Thursday',date:today},
 {id:'DEMO-103',property:'Estrella',zone:'NW Fresno',title:'Clean mailboxes & walkway lights',priority:'Low',hours:1.5,tech:'Tech 1',status:'Scheduled',desc:'Clean mailboxes and walkway light surfaces. Confirm access before visit.',recurring:'Thursday',date:today},
 {id:'00012196',property:'Cambridge Terrace',zone:'Clovis / NE',title:'Clean pool area and bathrooms',priority:'Normal',hours:2.5,tech:'Tech 2',status:'Scheduled',desc:'Clean pool area and bathrooms. Attach completion notes.',recurring:'Thursday',date:today},
 {id:'00012192',property:'Modena',zone:'Clovis / NE',title:'10 MPH and children playing signs',priority:'Low',hours:2,tech:'Tech 2',status:'Scheduled',desc:'Verify sign locations, mounting hardware and approved scope before starting.',recurring:'',date:today},
 {id:'DEMO-106',property:'European Glen',zone:'Clovis / NE',title:'Trash cleaning & dewebbing',priority:'Normal',hours:1.5,tech:'Tech 2',status:'Scheduled',desc:'Clean trash enclosures and light dewebbing at the entrance. Example property association.',recurring:'Thursday',date:today},
-{id:'DEMO-107',property:'Arboleda',zone:'NW Fresno',title:'Gate hardware inspection',priority:'Normal',hours:0.5,tech:'Unassigned',status:'Ready',desc:'Illustrative ready-to-go job for a technician who finishes early.',recurring:'',date:today},
+{id:'DEMO-107',property:'Red Hawk Estates',zone:'Sanger / East Route',title:'Lighting and common-area check',priority:'Normal',hours:0.5,tech:'Unassigned',status:'Ready',desc:'Ready-work example for a technician who finishes early. Confirm gate access before assigning.',address:'E Ashlan Ave & N Greenwood Ave, Sanger, CA 93657',addressVerified:true,manager:'Community Manager',managerEmail:'',recurring:'',date:today},
 {id:'DEMO-108',property:'Villa Palazzo',zone:'North Fresno',title:'Replace damaged fixture',priority:'High',hours:1.5,tech:'Unassigned',status:'On hold',desc:'Illustrative blocked job: waiting for replacement fixture.',recurring:'',date:today}
 ]};
-let state;try{state=JSON.parse(localStorage.getItem('fieldwork-v1'))||structuredClone(seed)}catch{state=structuredClone(seed)}if(Number(state.settings.markupPolicyVersion||0)<2){state.settings.markup=50;state.settings.markupPolicyVersion=2;try{localStorage.setItem('fieldwork-v1',JSON.stringify(state))}catch{}}let page='dispatch',tech='Tech 1',search='',filter='All',selectedDate=today;
-function save(){try{localStorage.setItem('fieldwork-v1',JSON.stringify(state))}catch{toast('Browser storage is full. Export your data before continuing.');throw Error('Storage unavailable')}}
+let state;try{state=JSON.parse(localStorage.getItem(DEMO_STORAGE_KEY))}catch{state=null}
+if(!state||state.demoVersion!==9||!Array.isArray(state.jobs)||state.jobs.length<8||!state.settings){state=structuredClone(seed);try{localStorage.setItem(DEMO_STORAGE_KEY,JSON.stringify(state))}catch{}}
+let page='dispatch',tech='Tech 1',search='',filter='All',selectedDate=today;
+function save(){try{localStorage.setItem(DEMO_STORAGE_KEY,JSON.stringify(state))}catch{toast('Browser storage is full. Export your data before continuing.');throw Error('Storage unavailable')}}
 function log(msg){state.activity.unshift({text:msg,at:new Date().toISOString()});state.activity=state.activity.slice(0,100);save()}
 function toast(s){$('#toast').textContent=s;$('#toast').style.display='block';setTimeout(()=>$('#toast').style.display='none',3500)}
 function dayJobs(){return state.jobs.filter(j=>j.date===selectedDate)}
