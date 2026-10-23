@@ -23,6 +23,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: Verify application source
+        run: node verify-site.cjs --dir .
       - name: Configure Pages
         uses: actions/configure-pages@v5
         with:
@@ -34,3 +36,5 @@ jobs:
       - name: Deploy
         id: deployment
         uses: actions/deploy-pages@v4
+      - name: Verify public JavaScript and assets
+        run: node verify-site.cjs --dir . --url "${{ steps.deployment.outputs.page_url }}"
