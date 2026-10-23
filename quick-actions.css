@@ -1,2 +1,1 @@
 .quick-actions{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin:0 0 18px}.quick-actions button{min-height:64px;padding:10px 6px;display:grid;gap:3px;place-content:center;text-align:center;border-color:#ddd3e6;background:#faf8fc}.quick-actions b{font-size:12px}.quick-actions small{font-size:9px;color:#716b78;font-weight:500}@media(max-width:400px){.quick-actions{grid-template-columns:1fr 1fr}.quick-actions button{min-height:58px}}
-

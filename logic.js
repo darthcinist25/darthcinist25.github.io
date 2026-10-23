@@ -3,4 +3,3 @@ function estimate(v){const hours=Number(v.hours),rate=Number(v.rate),materials=N
 function capacity(jobs,tech,travel,other){const assigned=jobs.filter(j=>j.tech===tech);const work=assigned.reduce((a,j)=>{const actual=Number(j.actual||0)+(j.timer?Math.max(0,(Date.now()-j.timer)/3600000):0);return a+(j.status==='Complete'&&actual>0?actual:Math.max(Number(j.hours),actual));},0);const stops=new Set(assigned.map(j=>j.property)).size;return {work,travel:stops*travel/60,total:work+stops*travel/60+other/60,stops};}
 root.FW={estimate,capacity};if(typeof module!=='undefined')module.exports=root.FW;
 })(typeof window==='undefined'?globalThis:window);
-
